@@ -1,0 +1,78 @@
+{% load new_filters %}
+
+<!DOCTYPE html>{% load static %}
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Инфляция в России</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+    {% block content %}
+      <div class="row">
+        <h1 class="col s12">Инфляция в России</h1>
+        <div class="col s12 m8">
+          <table class="u-full-width">
+            <thead>
+              <tr>
+                {% for el in head|slice:":13" %}
+                  <th>{{ el }}</th>
+                {% endfor %}
+                {% for el in head|slice:"13:" %}
+                  <th style="background-color: #808080">{{ el }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for line in data %}
+                <tr>
+                  {% for el in line|split|slice:":1" %}
+                      <td>{{ el }}</td>
+                  {% endfor %}
+                  {% for el in line|split|slice:"1:13" %}
+                    {% if el == '' %}
+                       <td>-</td>
+                    {% endif %}
+
+                    {% if el|float < 0 %}
+                       <td style="background-color: #3CB371">{{ el }}</td>
+                    {% endif %}
+
+                    {% if el|float >= 1 and el|float < 2 %}
+                       <td style="background-color: #FFC0CB">{{ el }}</td>
+                    {% endif %}
+                    {% if el|float >= 2 and el|float < 5 %}
+                       <td style="background-color: #CD5C5C">{{ el }}</td>
+                    {% endif %}
+                    {% if el|float >= 5 %}
+                       <td style="background-color: red">{{ el }}</td>
+                    {% endif %}
+                    {% if el|float >= 0 and el|float < 1 %}
+                       <td>{{ el }}</td>
+                    {% endif %}
+
+
+                  {% endfor %}
+                  {% for el in line|split|slice:"13:" %}
+                      <td style="background-color: #808080">{{ el }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endblock %}
+
+  </body>
+</html>
+
+
+
